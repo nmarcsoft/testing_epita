@@ -20,19 +20,19 @@ int main(int argc, char *argv[]) {
     fprintf(stderr, "Error opening file");
     return 1;
   }
-  FILE *logFile = fopen("LOG_FW1.tx", "a+");
-  if (!logFile) {
+  FILE *logFile_FW1_FW1_FW1_FW1 = fopen("LOG_FW1.tx", "a+");
+  if (!logFile_FW1_FW1_FW1_FW1) {
     fclose(file);
     perror("Failed to open LOG_FW1.tx");
     return 1;
   }
 
-  fprintf(logFile, "------- (%s): Debug starting -------\n", argv[1]);
-  fclose(logFile);
+  fprintf(logFile_FW1_FW1_FW1_FW1, "------- (%s): Debug starting -------\n", argv[1]);
+  fclose(logFile_FW1_FW1_FW1_FW1);
   int res = decode_and_log(file);
   fclose(file);
-  logFile = fopen("LOG_FW1.tx", "a+");
-  fprintf(logFile, "------- (%s): Exit code = %d -------\n", argv[1], res);
+  logFile_FW1_FW1_FW1_FW1 = fopen("LOG_FW1.tx", "a+");
+  fprintf(logFile_FW1_FW1_FW1_FW1, "------- (%s): Exit code = %d -------\n", argv[1], res);
 
   return res;
 }
