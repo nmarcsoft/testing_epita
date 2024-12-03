@@ -3,6 +3,7 @@ CFLAGS = -Wall -Wextra -std=c99 -g
 OBJ = src/main.o src/action.o src/decode_and_log.o
 
 TEST_FILES = ./tests/test_decode.c
+TEST_FILES_ACTIONS = ./tests/test_action.c
 
 all: main
 
@@ -25,4 +26,7 @@ distclean: clean
 	rm -f main
 
 test: $(TEST_FILES) src/action.o src/decode_and_log.o
+	$(CC) $(CFLAGS) -o $@ $^ -lcunit
+
+testAction: $(TEST_FILES_ACTIONS) src/action.o src/decode_and_log.o
 	$(CC) $(CFLAGS) -o $@ $^ -lcunit
