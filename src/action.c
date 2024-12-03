@@ -151,8 +151,8 @@ int action(char result[256]) {
   if (strlen(result) > 256)
     return 1;
 
-  FILE *logFile_FW1 = fopen("LOG_FW1.tx", "a+");
-  FILE *logFile_FW2 = fopen("LOG_FW2.tx", "a+");
+  FILE *logFile_FW1 = fopen("LOG_FW1.log", "a+");
+  FILE *logFile_FW2 = fopen("LOG_FW2.log", "a+");
   if (system_manager.error_cpt >= 10) {
     system_manager.FW = logFile_FW2;
   } else if (system_manager.error_cpt == 20) {
@@ -161,11 +161,11 @@ int action(char result[256]) {
     system_manager.FW = logFile_FW1;
   }
   if (!logFile_FW1) {
-    perror("Failed to open LOG_FW1.tx");
+    perror("Failed to open LOG_FW1.log");
     return 1;
   }
   if (!logFile_FW2) {
-    perror("Failed to open LOG_FW2.tx");
+    perror("Failed to open LOG_FW2.log");
     return 1;
   }
   fprintf(logFile_FW1, "%s\n", result);
