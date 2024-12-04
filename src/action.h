@@ -45,5 +45,6 @@ struct System_Manager {
 
 int action(char result[256]);
 char *replaceWord(const char *s, const char *oldW, const char *newW);
+void replaceTRACE(char toChange[256]);
 
 #endif
