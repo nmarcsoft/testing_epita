@@ -140,13 +140,23 @@ void test_decode_and_log_for_bad_char(void) {
   fclose(report_file);
 }
 
-void test_decode_and_log_for_input_FW_test(void) {
+void test_decode_and_log_too_short(void) {
   FILE *report_file = fopen("report_test.txt", "a+");
   if (report_file == NULL) {
     CU_FAIL("Failed to open report file");
     return;
   }
-  test_decode_non_valid("tests/input_test_FW.txt", report_file);
+  test_decode_non_valid("tests/input_too_short.txt", report_file);
+  fclose(report_file);
+}
+
+void test_decode_and_log_empty_file(void) {
+  FILE *report_file = fopen("report_test.txt", "a+");
+  if (report_file == NULL) {
+    CU_FAIL("Failed to open report file");
+    return;
+  }
+  test_decode_non_valid("tests/input_empty.txt", report_file);
   fclose(report_file);
 }
 
@@ -179,14 +189,21 @@ int main(void) {
     CU_cleanup_registry();
     return CU_get_error();
   }
-  if (CU_add_test(pSuite, "Test decode_and_log with test/input_FW_test.txt",
-                  test_decode_and_log_for_input_FW_test) == NULL) {
+
+  if (CU_add_test(pSuite, "Test decode_and_log with file list",
+                  test_decode_files_from_list) == NULL) {
     CU_cleanup_registry();
     return CU_get_error();
   }
 
-  if (CU_add_test(pSuite, "Test decode_and_log with file list",
-                  test_decode_files_from_list) == NULL) {
+  if (CU_add_test(pSuite, "Test decode_and_log with file input_too_short.txt",
+                  test_decode_and_log_too_short) == NULL) {
+    CU_cleanup_registry();
+    return CU_get_error();
+  }
+
+  if (CU_add_test(pSuite, "Test decode_and_log with file input_empty.txt",
+                  test_decode_and_log_empty_file) == NULL) {
     CU_cleanup_registry();
     return CU_get_error();
   }

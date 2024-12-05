@@ -13,3 +13,42 @@
 [2024-12-05 22:16:39] decode_and_log(tests/input_FW.txt) succeeded
 [2024-12-05 22:16:39] decode_and_log(tests/test_2.txt) failed
 [2024-12-05 22:16:39] Failed to open file: tests/no_files.txt
+[2024-12-05 23:20:27] decode_and_log(input_FW.txt) succeeded
+[2024-12-05 23:20:27] decode_and_log(tests/input_bad_char.txt) failed
+[2024-12-05 23:20:27] decode_and_log(tests/input_test_FW.txt) failed to open file
+[2024-12-05 23:20:27] decode_and_log(tests/input_FW.txt) succeeded
+[2024-12-05 23:20:27] decode_and_log(tests/test_2.txt) failed
+[2024-12-05 23:20:27] Failed to open file: tests/no_files.txt
+[2024-12-05 23:20:51] decode_and_log(input_FW.txt) succeeded
+[2024-12-05 23:20:51] decode_and_log(tests/input_bad_char.txt) failed
+[2024-12-05 23:20:51] decode_and_log(tests/input_test_FW.txt) failed to open file
+[2024-12-05 23:20:51] decode_and_log(tests/input_FW.txt) succeeded
+[2024-12-05 23:20:51] decode_and_log(tests/test_2.txt) failed
+[2024-12-05 23:20:51] Failed to open file: tests/no_files.txt
+[2024-12-05 23:53:57] decode_and_log(input_FW.txt) succeeded
+[2024-12-05 23:53:57] decode_and_log(tests/input_bad_char.txt) failed
+[2024-12-05 23:53:57] decode_and_log(tests/input_test_FW.txt) failed to open file
+[2024-12-05 23:53:57] decode_and_log(tests/input_FW.txt) succeeded
+[2024-12-05 23:53:57] decode_and_log(tests/test_2.txt) failed
+[2024-12-05 23:53:57] Failed to open file: tests/no_files.txt
+[2024-12-05 23:56:30] decode_and_log(input_FW.txt) succeeded
+[2024-12-05 23:56:30] decode_and_log(tests/input_bad_char.txt) failed
+[2024-12-05 23:56:30] decode_and_log(tests/input_FW.txt) succeeded
+[2024-12-05 23:56:30] decode_and_log(tests/test_2.txt) failed
+[2024-12-05 23:56:30] Failed to open file: tests/no_files.txt
+[2024-12-05 23:58:28] decode_and_log(input_FW.txt) succeeded
+[2024-12-05 23:58:28] decode_and_log(tests/input_bad_char.txt) failed
+[2024-12-05 23:58:28] decode_and_log(tests/input_FW.txt) succeeded
+[2024-12-05 23:58:28] Failed to open file: tests/test_2.txt
+[2024-12-05 23:58:28] Failed to open file: tests/no_files.txt
+[2024-12-06 00:00:53] decode_and_log(input_FW.txt) succeeded
+[2024-12-06 00:00:53] decode_and_log(tests/input_bad_char.txt) failed
+[2024-12-06 00:00:53] decode_and_log(tests/input_too_short.txt) succeeded
+[2024-12-06 00:02:57] decode_and_log(input_FW.txt) succeeded
+[2024-12-06 00:02:57] decode_and_log(tests/input_bad_char.txt) failed
+[2024-12-06 00:02:57] decode_and_log(tests/input_too_short.txt) succeeded
+[2024-12-06 00:02:57] decode_and_log(tests/input_empty.txt) failed
+[2024-12-06 00:08:03] decode_and_log(input_FW.txt) succeeded
+[2024-12-06 00:08:03] decode_and_log(tests/input_bad_char.txt) failed
+[2024-12-06 00:08:03] decode_and_log(tests/input_too_short.txt) succeeded
+[2024-12-06 00:08:03] decode_and_log(tests/input_empty.txt) failed
