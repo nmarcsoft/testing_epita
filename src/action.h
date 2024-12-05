@@ -43,6 +43,15 @@ struct System_Manager {
   int error_cpt;
 };
 
+extern struct Engine engine;
+extern struct Hydraulic hydraulic;
+extern struct Pressure pressure;
+extern struct Loads loads;
+extern struct Cabin cabin;
+extern struct Landing_Gear landing_gear;
+extern struct Flight_Information flight_information;
+extern struct System_Manager system_manager;
+
 int action(char result[256]);
 char *replaceWord(const char *s, const char *oldW, const char *newW);
 void replaceTRACE(char toChange[256]);
