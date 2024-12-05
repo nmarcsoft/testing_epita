@@ -61,7 +61,7 @@ void test_decode_files_from_list(void) {
   fclose(report_file);
 }
 
-void test_decode(const char *name, FILE *report_file) {
+void test_decode_(const char *name, FILE *report_file) {
   FILE *file = fopen(name, "r");
   if (file == NULL) {
     log_report(report_file, "decode_and_log(%s) failed to open file\n", name);
@@ -81,13 +81,62 @@ void test_decode(const char *name, FILE *report_file) {
   CU_ASSERT(result == 0);
 }
 
+void test_decode_valid(const char *name, FILE *report_file) {
+  FILE *file = fopen(name, "r");
+  if (file == NULL) {
+    log_report(report_file, "decode_and_log(%s) failed to open file\n", name);
+    CU_FAIL("Failed to open input file");
+    return;
+  }
+
+  int result = decode_and_log(file);
+  fclose(file);
+
+  if (result == 0) {
+    log_report(report_file, "decode_and_log(%s) succeeded\n", name);
+  } else {
+    log_report(report_file, "decode_and_log(%s) failed\n", name);
+  }
+
+  CU_ASSERT(result == 0);
+}
+
+void test_decode_non_valid(const char *name, FILE *report_file) {
+  FILE *file = fopen(name, "r");
+  if (file == NULL) {
+    log_report(report_file, "decode_and_log(%s) failed to open file\n", name);
+    CU_FAIL("Failed to open input file");
+    return;
+  }
+
+  int result = decode_and_log(file);
+  fclose(file);
+
+  if (result == 1) {
+    log_report(report_file, "decode_and_log(%s) succeeded\n", name);
+  } else {
+    log_report(report_file, "decode_and_log(%s) failed\n", name);
+  }
+
+  CU_ASSERT(result == 1);
+}
 void test_decode_and_log_for_input_FW(void) {
   FILE *report_file = fopen("report_test.txt", "a+");
   if (report_file == NULL) {
     CU_FAIL("Failed to open report file");
     return;
   }
-  test_decode("input_FW.txt", report_file);
+  test_decode_valid("input_FW.txt", report_file);
+  fclose(report_file);
+}
+
+void test_decode_and_log_for_bad_char(void) {
+  FILE *report_file = fopen("report_test.txt", "a+");
+  if (report_file == NULL) {
+    CU_FAIL("Failed to open report file");
+    return;
+  }
+  test_decode_non_valid("tests/input_bad_char.txt", report_file);
   fclose(report_file);
 }
 
@@ -97,7 +146,7 @@ void test_decode_and_log_for_input_FW_test(void) {
     CU_FAIL("Failed to open report file");
     return;
   }
-  test_decode("test/input_test_FW.txt", report_file);
+  test_decode_non_valid("tests/input_test_FW.txt", report_file);
   fclose(report_file);
 }
 
@@ -125,7 +174,11 @@ int main(void) {
     CU_cleanup_registry();
     return CU_get_error();
   }
-
+  if (CU_add_test(pSuite, "Test decode_and_log with input_bad_char.txt",
+                  test_decode_and_log_for_bad_char) == NULL) {
+    CU_cleanup_registry();
+    return CU_get_error();
+  }
   if (CU_add_test(pSuite, "Test decode_and_log with test/input_FW_test.txt",
                   test_decode_and_log_for_input_FW_test) == NULL) {
     CU_cleanup_registry();
