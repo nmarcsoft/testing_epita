@@ -1,6 +1,7 @@
 #include "../src/decode_and_log.h"
 #include <CUnit/Basic.h>
 #include <CUnit/CUnit.h>
+#include "../src/action.h"
 
 void log_report(FILE *report_file, const char *format, ...) {
   time_t t = time(NULL);
@@ -351,15 +352,143 @@ void test_action_flight_information_nothing() {
                "test_action_flight_information_nothing");
 }
 
-void test_action_simple_engine()
-{
-    struct Engine myEngine = { "", 0 };
-    action("TRACE-ENG-SON, LUM & TEXT-ALE-Eng\n");
-    //TODO : vérifier que it s'incrémente correctement, pour des alertes et alarmes
-    //Appeler action 3 fois, plus alerte, plus 2 fois de plus, puis alarme
-    //Faire cette fct pour tous les types : cabn flight information, loads, landing, etc...
-    //Ajouter toutes ces fct dans le main
+void test_action_simple_engine() {
+    engine.it = 0;
+    strncpy(engine.content, "", sizeof(engine.content));
+
+    char message[256] = "TRACE-ENG-SON, LUM & TEXT-ALE-Eng\n";
+    for (int i = 0; i < 3; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(engine.it, 3);
+    CU_ASSERT_STRING_EQUAL(engine.content, "ACTION-ENG-SON, LUM & TEXT-ALE-Eng\n");
+
+    strcpy(message, "TRACE-ENG-SON, LUM & TEXT-ALA-Eng\n");
+    for (int i = 0; i < 5; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(engine.it, 5);
+    CU_ASSERT_STRING_EQUAL(engine.content, "ACTION-ENG-SON, LUM & TEXT-ALA-Eng\n");
 }
+
+
+void test_action_simple_hydraulic() {
+    hydraulic.it = 0;
+    strncpy(hydraulic.content, "", sizeof(hydraulic.content));
+
+    char message[256] = "TRACE-HYD-SON, LUM & TEXT-ALE-Hyd\n";
+    for (int i = 0; i < 3; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(hydraulic.it, 3);
+    CU_ASSERT_STRING_EQUAL(hydraulic.content, "ACTION-HYD-SON, LUM & TEXT-ALE-Hyd\n");
+
+    strncpy(message, "TRACE-HYD-SON, LUM & TEXT-ALA-Hyd\n", sizeof(message));
+    for (int i = 0; i < 5; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(hydraulic.it, 5);
+    CU_ASSERT_STRING_EQUAL(hydraulic.content, "ACTION-HYD-SON, LUM & TEXT-ALA-Hyd\n");
+}
+
+
+void test_action_simple_pressure() {
+    pressure.it = 0;
+    strncpy(pressure.content, "", sizeof(pressure.content));
+
+    char message[256] = "TRACE-PRES-SON, LUM & TEXT-ALE-Pres\n";
+    for (int i = 0; i < 3; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(pressure.it, 3);
+    CU_ASSERT_STRING_EQUAL(pressure.content, "ACTION-PRES-SON, LUM & TEXT-ALE-Pres\n");
+
+    strncpy(message, "TRACE-PRES-SON, LUM & TEXT-ALA-Pres\n", sizeof(message));
+    for (int i = 0; i < 5; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(pressure.it, 5);
+    CU_ASSERT_STRING_EQUAL(pressure.content, "ACTION-PRES-SON, LUM & TEXT-ALA-Pres\n");
+}
+
+void test_action_simple_loads() {
+    loads.it = 0;
+    strncpy(loads.content, "", sizeof(loads.content));
+
+    char message[256] = "TRACE-LOAD-SON, LUM & TEXT-ALE-Load\n";
+    for (int i = 0; i < 3; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(loads.it, 3);
+    CU_ASSERT_STRING_EQUAL(loads.content, "ACTION-LOAD-SON, LUM & TEXT-ALE-Load\n");
+
+    strncpy(message, "TRACE-LOAD-SON, LUM & TEXT-ALA-Load\n", sizeof(message));
+    for (int i = 0; i < 5; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(loads.it, 5);
+    CU_ASSERT_STRING_EQUAL(loads.content, "ACTION-LOAD-SON, LUM & TEXT-ALA-Load\n");
+}
+
+void test_action_simple_cabin() {
+    cabin.it = 0;
+    strncpy(cabin.content, "", sizeof(cabin.content));
+
+    char message[256] = "TRACE-CAB-SON, LUM & TEXT-ALE-Cabin\n";
+    for (int i = 0; i < 3; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(cabin.it, 3);
+    CU_ASSERT_STRING_EQUAL(cabin.content, "ACTION-CAB-SON, LUM & TEXT-ALE-Cabin\n");
+
+    strncpy(message, "TRACE-CAB-SON, LUM & TEXT-ALA-Cabin\n", sizeof(message));
+    for (int i = 0; i < 5; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(cabin.it, 5);
+    CU_ASSERT_STRING_EQUAL(cabin.content, "ACTION-CAB-SON, LUM & TEXT-ALA-Cabin\n");
+}
+
+
+void test_action_simple_landing_gear() {
+    landing_gear.it = 0;
+    strncpy(landing_gear.content, "", sizeof(landing_gear.content));
+
+    char message[256] = "TRACE-LG-SON, LUM & TEXT-ALE-Landing\n";
+    for (int i = 0; i < 3; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(landing_gear.it, 3);
+    CU_ASSERT_STRING_EQUAL(landing_gear.content, "ACTION-LG-SON, LUM & TEXT-ALE-Landing\n");
+
+    strncpy(message, "TRACE-LG-SON, LUM & TEXT-ALA-Landing\n", sizeof(message));
+    for (int i = 0; i < 5; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(landing_gear.it, 5);
+    CU_ASSERT_STRING_EQUAL(landing_gear.content, "ACTION-LG-SON, LUM & TEXT-ALA-Landing\n");
+}
+
+
+void test_action_simple_flight_information() {
+    flight_information.it = 0;
+    strncpy(flight_information.content, "", sizeof(flight_information.content));
+
+    char message[256] = "TRACE-FINFO-SON, LUM & TEXT-ALE-Flight\n";
+    for (int i = 0; i < 3; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(flight_information.it, 3);
+    CU_ASSERT_STRING_EQUAL(flight_information.content, "ACTION-FINFO-SON, LUM & TEXT-ALE-Flight\n");
+
+    strncpy(message, "TRACE-FINFO-SON, LUM & TEXT-ALA-Flight\n", sizeof(message));
+    for (int i = 0; i < 5; i++) {
+        action(message);
+    }
+    CU_ASSERT_EQUAL(flight_information.it, 5);
+    CU_ASSERT_STRING_EQUAL(flight_information.content, "ACTION-FINFO-SON, LUM & TEXT-ALA-Flight\n");
+}
+
 
 typedef struct {
   const char *test_name;
@@ -389,7 +518,15 @@ TestCase test_cases[] = {
     {"Test for flight management alarm", test_action_flight_information_alarm},
     {"Test for flight management nothing",
      test_action_flight_information_nothing},
+    {"Test for simple engine", test_action_simple_engine},
+    {"Test for simple hydraulic", test_action_simple_hydraulic},
+    {"Test for simple pressure", test_action_simple_pressure},
+    {"Test for simple loads", test_action_simple_loads},
+    {"Test for simple cabin", test_action_simple_cabin},
+    {"Test for simple landing gear", test_action_simple_landing_gear},
+    {"Test for simple flight information", test_action_simple_flight_information},
 };
+
 
 int main() {
   if (CUE_SUCCESS != CU_initialize_registry()) {
