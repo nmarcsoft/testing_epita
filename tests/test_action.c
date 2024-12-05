@@ -1,9 +1,6 @@
 #include "../src/decode_and_log.h"
 #include <CUnit/Basic.h>
 #include <CUnit/CUnit.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <time.h>
 
 void log_report(FILE *report_file, const char *format, ...) {
   time_t t = time(NULL);
@@ -352,6 +349,16 @@ void test_action_flight_information_nothing() {
                                      "TRACE-FINFO-SON, LUM & TEXT-ALA-Eng\n";
   generic_test(input_data, expected_log_content,
                "test_action_flight_information_nothing");
+}
+
+void test_action_simple_engine()
+{
+    struct Engine myEngine = { "", 0 };
+    action("TRACE-ENG-SON, LUM & TEXT-ALE-Eng\n");
+    //TODO : vérifier que it s'incrémente correctement, pour des alertes et alarmes
+    //Appeler action 3 fois, plus alerte, plus 2 fois de plus, puis alarme
+    //Faire cette fct pour tous les types : cabn flight information, loads, landing, etc...
+    //Ajouter toutes ces fct dans le main
 }
 
 typedef struct {

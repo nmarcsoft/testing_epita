@@ -3,11 +3,46 @@
 #include <CUnit/CUnit.h>
 #include <setjmp.h>
 #include <signal.h>
+
+void log_report(FILE *report_file, const char *format, ...) {
+  time_t t = time(NULL);
+  struct tm tm = *localtime(&t);
+  fprintf(report_file, "[%04d-%02d-%02d %02d:%02d:%02d] ", tm.tm_year + 1900,
+          tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+  va_list args;
+  va_start(args, format);
+  vfprintf(report_file, format, args);
+  va_end(args);
+}
+
+void report_result(char* actual_log_content, char* expected_log_content, char* test_name)
+{
+   FILE *report_log = fopen("report_test.txt", "a+");
+  if (report_log == NULL) {
+    printf("Error: Could not open the report file.\n");
+    return;
+  }
+
+  if (!strcmp(actual_log_content, expected_log_content)) {
+    char result_message[256];
+    snprintf(result_message, sizeof(result_message), "%s succeeded\n",
+             test_name);
+    log_report(report_log, result_message);
+  } else {
+    char result_message[256];
+    snprintf(result_message, sizeof(result_message), "%s failed\n", test_name);
+    log_report(report_log, result_message);
+  }
+
+  fclose(report_log);
+}
+
 void traceStart() {
   char testTraceStart[256] = "TRACE-OTHER";
   char solutionTraceStart[256] = "ACTION-OTHER";
   replaceTRACE(testTraceStart);
   CU_ASSERT_STRING_EQUAL(testTraceStart, solutionTraceStart);
+  report_result(testTraceStart, solutionTraceStart, "traceStart");
   CU_PASS("traceStart");
 }
 
@@ -16,6 +51,7 @@ void traceEnd() {
   char solutionTraceEnd[256] = "OTHER-ACTION";
   replaceTRACE(testTraceEnd);
   CU_ASSERT_STRING_EQUAL(testTraceEnd, solutionTraceEnd);
+  report_result(testTraceEnd, solutionTraceEnd, "traceEnd");
   CU_PASS("traceEnd");
 }
 
@@ -24,6 +60,7 @@ void traceMiddle() {
   char solutionTraceMiddle[256] = "OTHER-ACTION-OTHER";
   replaceTRACE(testTraceMiddle);
   CU_ASSERT_STRING_EQUAL(testTraceMiddle, solutionTraceMiddle);
+  report_result(testTraceMiddle, solutionTraceMiddle, "traceMiddle");
   CU_PASS("traceMiddle");
 }
 
@@ -32,6 +69,7 @@ void traceMissing() {
   char solutionTraceMissing[256] = "OTHER";
   replaceTRACE(testTraceMissing);
   CU_ASSERT_STRING_EQUAL(testTraceMissing, solutionTraceMissing);
+  report_result(testTraceMissing, solutionTraceMissing, "traceMissing");
   CU_PASS("traceMissing");
 }
 
@@ -40,6 +78,7 @@ void traceMultiple() {
   char solutionTraceMultiple[256] = "OTHER-ACTION-ACTION-OTHER";
   replaceTRACE(testTraceMultiple);
   CU_ASSERT_STRING_EQUAL(testTraceMultiple, solutionTraceMultiple);
+  report_result(testTraceMultiple, solutionTraceMultiple, "traceMultiple");
   CU_PASS("traceMultiple");
 }
 
@@ -58,6 +97,7 @@ void tooLong() {
       "OTHER";
   replaceTRACE(testTooLong);
   CU_ASSERT_STRING_EQUAL(testTooLong, solutionTooLong);
+  report_result(testTooLong, solutionTooLong, "traceTooLong");
   CU_PASS("tooLong");
 }
 
@@ -66,6 +106,7 @@ void tooShort() {
   char solutionTooShort[100] = "TRACE-OTHER";
   replaceTRACE(testTooShort);
   CU_ASSERT_STRING_EQUAL(testTooShort, solutionTooShort);
+  report_result(testTooShort, solutionTooShort, "traceTooShort");
   CU_PASS("tooShort");
 }
 
@@ -74,6 +115,7 @@ void traceLower() {
   char solutionTraceLower[100] = "trace-OTHER";
   replaceTRACE(testTraceLower);
   CU_ASSERT_STRING_EQUAL(testTraceLower, solutionTraceLower);
+  report_result(testTraceLower, solutionTraceLower, "traceLower");
   CU_PASS("traceLower");
 }
 
@@ -82,6 +124,7 @@ void traceUpperAndLower() {
   char solutionTraceUpperAndLower[256] = "TraCE-OTHER";
   replaceTRACE(testTraceUpperAndLower);
   CU_ASSERT_STRING_EQUAL(testTraceUpperAndLower, solutionTraceUpperAndLower);
+  report_result(testTraceUpperAndLower, solutionTraceUpperAndLower, "traceUpperAndLower");
   CU_PASS("traceUpperAndLower");
 }
 
@@ -90,6 +133,7 @@ void badChars1() {
   char solutionBadChars1[256] = "\nACTION-OTHER";
   replaceTRACE(testBadChars1);
   CU_ASSERT_STRING_EQUAL(testBadChars1, solutionBadChars1);
+  report_result(testBadChars1, solutionBadChars1, "traceBadChars1");
   CU_PASS("badChars1");
 }
 
@@ -98,6 +142,7 @@ void badChars2() {
   char solutionBadChars2[256] = "TRA\nCE-OTHER";
   replaceTRACE(testBadChars2);
   CU_ASSERT_STRING_EQUAL(testBadChars2, solutionBadChars2);
+  report_result(testBadChars2, solutionBadChars2, "traceBadChars2");
   CU_PASS("badChars2");
 }
 
@@ -106,6 +151,7 @@ void badChars3() {
   char solutionBadChars3[256] = "ACTION\n-OTHER";
   replaceTRACE(testBadChars3);
   CU_ASSERT_STRING_EQUAL(testBadChars3, solutionBadChars3);
+  report_result(testBadChars3, solutionBadChars3, "traceBadChars3");
   CU_PASS("badChars3");
 }
 
@@ -114,6 +160,7 @@ void badChars4() {
   char solutionBadChars4[256] = "ACTION-OTHER\n";
   replaceTRACE(testBadChars4);
   CU_ASSERT_STRING_EQUAL(testBadChars4, solutionBadChars4);
+  report_result(testBadChars4, solutionBadChars4, "traceBadChars4");
   CU_PASS("badChars4");
 }
 
@@ -122,6 +169,7 @@ void badChars5() {
   char solutionBadChars5[256] = "\0TRACE-OTHER";
   replaceTRACE(testBadChars5);
   CU_ASSERT_STRING_EQUAL(testBadChars5, solutionBadChars5);
+  report_result(testBadChars5, solutionBadChars5, "traceBadChars5");
   CU_PASS("badChars5");
 }
 
@@ -130,6 +178,7 @@ void badChars6() {
   char solutionBadChars6[256] = "TRA\0CE-OTHER";
   replaceTRACE(testBadChars6);
   CU_ASSERT_STRING_EQUAL(testBadChars6, solutionBadChars6);
+  report_result(testBadChars6, solutionBadChars6, "traceBadChars6");
   CU_PASS("badChars6");
 }
 
@@ -138,6 +187,7 @@ void badChars7() {
   char solutionBadChars7[256] = "ACTION\0-OTHER";
   replaceTRACE(testBadChars7);
   CU_ASSERT_STRING_EQUAL(testBadChars7, solutionBadChars7);
+  report_result(testBadChars7, solutionBadChars7, "traceBadChars7");
   CU_PASS("badChars7");
 }
 
@@ -146,12 +196,14 @@ void badChars8() {
   char solutionBadChars8[256] = "ACTION-OTHER\0";
   replaceTRACE(testBadChars8);
   CU_ASSERT_STRING_EQUAL(testBadChars8, solutionBadChars8);
+  report_result(testBadChars8, solutionBadChars8, "traceBadChars8");
   CU_PASS("badChars8");
 }
 
 static jmp_buf jump_buffer;
 
 void signal_handler(int sig) {
+   report_result("", "", "badType");
   printf("Crash détecté : Signal %d reçu.\n", sig);
   longjmp(jump_buffer, 1);
 }
@@ -163,6 +215,7 @@ void badType1() {
     int testBadType1 = 123;
     replaceTRACE(testBadType1);
      CU_FAIL("Le test n'a pas échoué comme prévu !");
+    report_result("", "0", "badType1");
   } else {
     CU_PASS();
   }
@@ -175,6 +228,7 @@ void badType2() {
     int testBadType1 = 123;
     replaceTRACE(NULL);
      CU_FAIL("Le test n'a pas échoué comme prévu !");
+    report_result("", "0", "badType2");
   } else {
     CU_PASS();
   }
@@ -190,6 +244,7 @@ void badType3() {
   replaceTRACE(testBadType3);
   CU_ASSERT_STRING_EQUAL(testBadType3, solutionBadType3);
   CU_FAIL("Le test n'a pas échoué comme prévu !");
+  report_result(testBadType3, solutionBadType3, "badType3");
   } else {
     CU_PASS();
   }
