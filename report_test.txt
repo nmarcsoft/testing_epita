@@ -1,3 +1,15 @@
 [2024-12-03 10:53:37] decode_and_log(input_FW.txt) succeeded
 [2024-12-03 10:53:37] decode_and_log(tests/input_FW.txt) succeeded
 [2024-12-03 10:53:37] decode_and_log(tests/test_2.txt) failed
+[2024-12-05 21:52:06] decode_and_log(input_FW.txt) succeeded
+[2024-12-05 21:52:06] decode_and_log(tests/input_FW.txt) succeeded
+[2024-12-05 21:52:06] decode_and_log(tests/test_2.txt) failed
+[2024-12-05 21:53:48] decode_and_log(input_FW.txt) succeeded
+[2024-12-05 21:53:48] decode_and_log(tests/input_FW.txt) succeeded
+[2024-12-05 21:53:48] decode_and_log(tests/test_2.txt) failed
+[2024-12-05 21:53:48] Failed to open file: tests/no_files.txt
+[2024-12-05 22:16:39] decode_and_log(input_FW.txt) succeeded
+[2024-12-05 22:16:39] decode_and_log(test/input_test_FW.txt) failed to open file
+[2024-12-05 22:16:39] decode_and_log(tests/input_FW.txt) succeeded
+[2024-12-05 22:16:39] decode_and_log(tests/test_2.txt) failed
+[2024-12-05 22:16:39] Failed to open file: tests/no_files.txt

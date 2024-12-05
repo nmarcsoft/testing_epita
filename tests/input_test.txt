@@ -1,2 +1,3 @@
 tests/input_FW.txt
 tests/test_2.txt
+tests/no_files.txt

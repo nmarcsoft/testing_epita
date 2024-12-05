@@ -36,7 +36,7 @@ void test_decode_files_from_list(void) {
   while (fgets(filename, sizeof(filename), list_file)) {
     size_t len = strlen(filename);
     if (len > 0 && filename[len - 1] == '\n') {
-      filename[len - 1] = '\0'; // Supprime le caractère '\n'
+      filename[len - 1] = '\0';
     }
 
     FILE *file = fopen(filename, "r");
@@ -91,13 +91,23 @@ void test_decode_and_log_for_input_FW(void) {
   fclose(report_file);
 }
 
+void test_decode_and_log_for_input_FW_test(void) {
+  FILE *report_file = fopen("report_test.txt", "a+");
+  if (report_file == NULL) {
+    CU_FAIL("Failed to open report file");
+    return;
+  }
+  test_decode("test/input_test_FW.txt", report_file);
+  fclose(report_file);
+}
+
 void test_from_input(void) {}
 
 int init_suite(void) { return 0; }
 
 int clean_suite(void) { return 0; }
 
-int main(int argc, char *argv[]) {
+int main(void) {
   if (CUE_SUCCESS != CU_initialize_registry()) {
     log_report(stderr, "CUnit initialization failed\n");
     return CU_get_error();
@@ -116,6 +126,12 @@ int main(int argc, char *argv[]) {
     return CU_get_error();
   }
 
+  if (CU_add_test(pSuite, "Test decode_and_log with test/input_FW_test.txt",
+                  test_decode_and_log_for_input_FW_test) == NULL) {
+    CU_cleanup_registry();
+    return CU_get_error();
+  }
+
   if (CU_add_test(pSuite, "Test decode_and_log with file list",
                   test_decode_files_from_list) == NULL) {
     CU_cleanup_registry();
@@ -127,4 +143,3 @@ int main(int argc, char *argv[]) {
   CU_cleanup_registry();
   return CU_get_error();
 }
-
