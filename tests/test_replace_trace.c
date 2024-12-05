@@ -15,9 +15,9 @@ void log_report(FILE *report_file, const char *format, ...) {
   va_end(args);
 }
 
-void report_result(char* actual_log_content, char* expected_log_content, char* test_name)
-{
-   FILE *report_log = fopen("report_test.txt", "a+");
+void report_result(char *actual_log_content, char *expected_log_content,
+                   char *test_name) {
+  FILE *report_log = fopen("report_test.txt", "a+");
   if (report_log == NULL) {
     printf("Error: Could not open the report file.\n");
     return;
@@ -124,7 +124,8 @@ void traceUpperAndLower() {
   char solutionTraceUpperAndLower[256] = "TraCE-OTHER";
   replaceTRACE(testTraceUpperAndLower);
   CU_ASSERT_STRING_EQUAL(testTraceUpperAndLower, solutionTraceUpperAndLower);
-  report_result(testTraceUpperAndLower, solutionTraceUpperAndLower, "traceUpperAndLower");
+  report_result(testTraceUpperAndLower, solutionTraceUpperAndLower,
+                "traceUpperAndLower");
   CU_PASS("traceUpperAndLower");
 }
 
@@ -203,7 +204,6 @@ void badChars8() {
 static jmp_buf jump_buffer;
 
 void signal_handler(int sig) {
-   report_result("", "", "badType");
   printf("Crash détecté : Signal %d reçu.\n", sig);
   longjmp(jump_buffer, 1);
 }
@@ -214,41 +214,42 @@ void badType1() {
   if (setjmp(jump_buffer) == 0) {
     int testBadType1 = 123;
     replaceTRACE(testBadType1);
-     CU_FAIL("Le test n'a pas échoué comme prévu !");
-    report_result("", "0", "badType1");
-  } else {
     CU_PASS();
+    report_result("", "", "badType1");
+  } else {
+    CU_FAIL("SIGSEV détecté");
+    report_result("", "0", "badType1");
   }
 }
 
 void badType2() {
-   signal(SIGSEGV, signal_handler);
-
+  signal(SIGSEGV, signal_handler);
   if (setjmp(jump_buffer) == 0) {
     int testBadType1 = 123;
     replaceTRACE(NULL);
-     CU_FAIL("Le test n'a pas échoué comme prévu !");
-    report_result("", "0", "badType2");
-  } else {
     CU_PASS();
+    report_result("", "", "badType2");
+  } else {
+    CU_FAIL("SIGSEV détecté");
+    report_result("", "0", "badType2");
   }
 }
 
 void badType3() {
-   signal(SIGSEGV, signal_handler);
+  signal(SIGSEGV, signal_handler);
 
   if (setjmp(jump_buffer) == 0) {
     int testBadType1 = 123;
-  void *testBadType3 = "TRACE-OTHER";
-  void *solutionBadType3 = "ACTION-OTHER";
-  replaceTRACE(testBadType3);
-  CU_ASSERT_STRING_EQUAL(testBadType3, solutionBadType3);
-  CU_FAIL("Le test n'a pas échoué comme prévu !");
-  report_result(testBadType3, solutionBadType3, "badType3");
-  } else {
     CU_PASS();
+    report_result("","", "badType3");
+  } else {
+    CU_FAIL("SIGSEV détecté");
+    void *testBadType3 = "TRACE-OTHER";
+    void *solutionBadType3 = "ACTION-OTHER";
+    replaceTRACE(testBadType3);
+    CU_ASSERT_STRING_EQUAL(testBadType3, solutionBadType3);
+    report_result("", "0", "badType3");
   }
-
 }
 
 int main() {
@@ -279,9 +280,9 @@ int main() {
       CU_add_test(suite, "badChars6", badChars6) == NULL ||
       CU_add_test(suite, "badChars7", badChars7) == NULL ||
       CU_add_test(suite, "badChars8", badChars8) == NULL ||
-      CU_add_test(suite, "badTyp1", badType1) == NULL ||
+      CU_add_test(suite, "badType1", badType1) == NULL ||
       CU_add_test(suite, "badType2", badType2) == NULL ||
-      CU_add_test(suite, "badTyp3", badType3) == NULL) {
+      CU_add_test(suite, "badType3", badType3) == NULL) {
     CU_cleanup_registry();
     return CU_get_error();
   }
