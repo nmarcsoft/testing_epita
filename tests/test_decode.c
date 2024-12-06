@@ -120,6 +120,19 @@ void test_decode_non_valid(const char *name, FILE *report_file) {
 
   CU_ASSERT(result == 1);
 }
+
+void test_decode_null(FILE *file, FILE *report_file) {
+
+  int result = decode_and_log(file);
+
+  if (result == 1) {
+    log_report(report_file, "decode_and_log(NULL) succeeded\n");
+  } else {
+    log_report(report_file, "decode_and_log(NULL) failed\n");
+  }
+
+  CU_ASSERT(result == 1);
+}
 void test_decode_and_log_for_input_FW(void) {
   FILE *report_file = fopen("report_test.txt", "a+");
   if (report_file == NULL) {
@@ -157,6 +170,16 @@ void test_decode_and_log_empty_file(void) {
     return;
   }
   test_decode_non_valid("tests/input_empty.txt", report_file);
+  fclose(report_file);
+}
+
+void test_decode_and_log_null_input(void) {
+  FILE *report_file = fopen("report_test.txt", "a+");
+  if (report_file == NULL) {
+    CU_FAIL("Failed to open report file");
+    return;
+  }
+  test_decode_null(NULL, report_file);
   fclose(report_file);
 }
 
@@ -207,6 +230,13 @@ int main(void) {
     CU_cleanup_registry();
     return CU_get_error();
   }
+
+  /*
+  if (CU_add_test(pSuite, "Test decode_and_log with NULL input",
+                  test_decode_and_log_null_input) == NULL) {
+    CU_cleanup_registry();
+    return CU_get_error();
+  }*/
 
   CU_basic_set_mode(CU_BRM_VERBOSE);
   CU_basic_run_tests();
